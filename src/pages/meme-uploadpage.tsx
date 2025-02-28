@@ -113,16 +113,7 @@ export default function MemeUploader() {
     formData.append("upload_preset", "meme_uploads"); // Replace with your Cloudinary upload preset
   
     // Correct way to send metadata
-    const metadata = {
-      caption,
-      position,
-      color: textColor.replace("#", ""),
-      size: fontSize,
-      bold: isBold,
-      italic: isItalic,
-    };
-  
-    formData.append("context", JSON.stringify(metadata)); // Cloudinary expects JSON for context
+    formData.append("context", `caption=${caption}|position=${position}|color=${textColor.replace("#", "")}|size=${fontSize}|bold=${isBold}|italic=${isItalic}`);
   
     try {
       // Simulate upload progress
@@ -135,13 +126,12 @@ export default function MemeUploader() {
   
       // Upload to Cloudinary
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.CLOUD_NAME}/image/upload`, // Replace YOUR_CLOUD_NAME with actual Cloudinary cloud name
+        `api/upload`,
         {
           method: "POST",
           body: formData,
         }
       );
-      console.log(process.env.CLOUD_NAME);
   
       clearInterval(progressInterval);
       setUploadProgress(100);
@@ -248,7 +238,7 @@ export default function MemeUploader() {
                             : position === "middle"
                             ? "top-1/2 transform -translate-y-1/2"
                             : "bottom-0"
-                        } bg-black bg-opacity-20`}
+                        } `}
                       >
                         <div
                           style={{
