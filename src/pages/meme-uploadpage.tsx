@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Loader2, Upload, ImageIcon, Sparkles } from "lucide-react";
 import Image from "next/image";
 import TextFormatting from "@/components/text-formating";
+import { uploadMeme } from "@/actions/meme";
 
 export default function MemeUploader() {
   const [file, setFile] = useState<File | null>(null);
@@ -170,6 +171,11 @@ export default function MemeUploader() {
       setUploadProgress(100);
   
       const data = await response.json();
+
+      // add 
+
+      await uploadMeme( data.publicId , caption);
+
       console.log("Upload successful:", data);
   
       // Reset form after successful upload
