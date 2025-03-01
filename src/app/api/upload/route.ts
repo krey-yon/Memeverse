@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import prisma from "@/lib/db";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -18,6 +19,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
+    const caption = formData.get("caption") as string | null;
 
     if (!file) {
       return NextResponse.json("No file found");
@@ -41,6 +43,15 @@ export async function POST(request: NextRequest) {
         uploadStream.end(buffer);
       }
     );
+    //todo: save to db for sahil
+    // const post = await prisma.post.create({
+    //   data: {
+    //     caption: caption,
+    //     imageUrl: result.secure_url,
+    //     authorId: 1,
+    //   },
+    // })
+
     // console.log(result);
     return NextResponse.json({ publicId: result.secure_url }, { status: 200 });
   } catch (error) {

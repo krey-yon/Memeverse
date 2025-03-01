@@ -119,8 +119,9 @@ export default function MemeUploader() {
       // Create FormData and append the image
       const formData = new FormData();
       formData.append('file', blob, `converted-image${Date.now()}.png`);
-      console.log(formData);
-      console.log('FormData created successfully');
+      formData.append('caption', caption);
+      // console.log(formData);
+      // console.log('FormData created successfully');
       
       return formData;
     } catch (error) {
@@ -145,7 +146,7 @@ export default function MemeUploader() {
     // Convert HTML to image and create FormData
     // console.log("formdata"+ formData);
     const formData = await convertToImageAndCreateFormData();
-    console.log("formdata2" +  formData);
+    // console.log("formdata2" +  formData);
   
     try {
       // Simulate upload progress
