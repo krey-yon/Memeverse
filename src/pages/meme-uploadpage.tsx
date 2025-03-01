@@ -1,7 +1,8 @@
 "use client";
 
 import type React from "react";
-
+// import * as htmlToImage from 'html-to-image';
+import { toPng } from 'html-to-image';
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +22,7 @@ export default function MemeUploader() {
   const [isGeneratingCaption, setIsGeneratingCaption] = useState(false);
   const [activeTab, setActiveTab] = useState("upload");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const htmlToImageRef = useRef<HTMLDivElement>(null);
 
   // Text formatting state
   const [position, setPosition] = useState("top");
@@ -101,6 +103,31 @@ export default function MemeUploader() {
     }
   };
 
+  const convertToImageAndCreateFormData = async () => {
+    try {
+      if (htmlToImageRef.current === null) {
+        return;
+      }
+
+      // Convert the HTML element to a PNG
+      const dataUrl = await toPng(htmlToImageRef.current, { quality: 0.95 });
+      
+      // Convert dataUrl to a Blob
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      
+      // Create FormData and append the image
+      const formData = new FormData();
+      formData.append('file', blob, `converted-image${Date.now()}.png`);
+      console.log(formData);
+      console.log('FormData created successfully');
+      
+      return formData;
+    } catch (error) {
+      console.error('Error generating image:', error);
+    }
+  };
+
   const uploadToCloudinary = async () => {
     if (!file || !preview) return;
   
@@ -108,12 +135,17 @@ export default function MemeUploader() {
     setUploadProgress(0);
   
     // Create a FormData instance
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "meme_uploads"); // Replace with your Cloudinary upload preset
+    // const formData = new FormData();
+    // formData.append("file", file);
+    // formData.append("upload_preset", "meme_uploads"); // Replace with your Cloudinary upload preset
   
-    // Correct way to send metadata
-    formData.append("context", `caption=${caption}|position=${position}|color=${textColor.replace("#", "")}|size=${fontSize}|bold=${isBold}|italic=${isItalic}`);
+    // // Correct way to send metadata
+    // formData.append("context", `caption=${caption}|position=${position}|color=${textColor.replace("#", "")}|size=${fontSize}|bold=${isBold}|italic=${isItalic}`);
+
+    // Convert HTML to image and create FormData
+    // console.log("formdata"+ formData);
+    const formData = await convertToImageAndCreateFormData();
+    console.log("formdata2" +  formData);
   
     try {
       // Simulate upload progress
@@ -223,23 +255,24 @@ export default function MemeUploader() {
             <CardContent className="pt-6 space-y-6">
               {preview && (
                 <div className="flex flex-col space-y-6">
-                  <div className="relative w-full aspect-square max-h-[400px] overflow-hidden rounded-lg">
+                  <div className="relative w-full aspect-square max-h-[400px] overflow-hidden" ref={htmlToImageRef}>
                     <Image
                       src={preview || "/placeholder.svg"}
                       alt="Meme preview"
                       fill
-                      className="object-contain"
-                    />
+                      className="object-cover"
+                      layout="fill"
+                      />
                     {caption && (
                       <div
-                        className={`absolute inset-x-0 p-4 ${
+                      className={`absolute inset-x-0 p-4 ${
                           position === "top"
                             ? "top-0"
                             : position === "middle"
                             ? "top-1/2 transform -translate-y-1/2"
                             : "bottom-0"
-                        } `}
-                      >
+                          } `}
+                          >
                         <div
                           style={{
                             color: textColor,
@@ -248,7 +281,7 @@ export default function MemeUploader() {
                             fontWeight: isBold ? "bold" : "normal",
                             fontStyle: isItalic ? "italic" : "normal",
                           }}
-                        >
+                          >
                           {caption.split("\n").map((line, i) => (
                             <div key={i}>{line}</div>
                           ))}
