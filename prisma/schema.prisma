@@ -19,5 +19,26 @@ model User {
   name String?
   password String?
   createdAt DateTime @default(now())
+  posts Post[]
+  likes Like[]
 }
 
+model Post {
+  id String @id @default(uuid())
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+  imageUrl String
+  caption String?
+  createdAt DateTime @default(now())
+  likes Like[]
+}
+
+model Like {
+  id String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meme Post @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  userId String
+  memeId String
+  createdAt DateTime @default(now())
+  @@unique([userId, memeId])
+}
