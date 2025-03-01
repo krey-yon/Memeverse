@@ -4,7 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET, // Click 'View Credentials' below to copy your API secret
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 interface CloudinaryUploadResult {
@@ -15,11 +15,8 @@ interface CloudinaryUploadResult {
 
 export async function POST(request: NextRequest) {
 
-    // console.log(cloudinary.config());
-
   try {
     const formData = await request.formData();
-    console.log(formData);
     const file = formData.get("file") as File | null;
 
     if (!file) {
