@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import prisma from "@/lib/db";
+import { uploadMeme } from "@/actions/meme";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -53,7 +53,8 @@ export async function POST(request: NextRequest) {
     // })
 
     // console.log(result);
-    return NextResponse.json({ publicId: result.secure_url }, { status: 200 });
+    const newMeme =  await uploadMeme(result.secure_url, caption!);
+    return NextResponse.json({ publicId: result.secure_url, newMeme }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
