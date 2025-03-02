@@ -103,12 +103,12 @@ export default function MemeExplorer() {
 
   // Fetch memes based on current filters
   const fetchMemes = useCallback(async () => {
-    const newMemes = await getMemes()
+    
     if (loading || !hasMore) return
 
     setLoading(true)
     try {
-
+      const newMemes = await getMemes()
       if (newMemes.length === 0) {
         setHasMore(false)
       } else {
@@ -120,26 +120,23 @@ export default function MemeExplorer() {
     } finally {
       setLoading(false)
     }
-  }, [loading, hasMore])
+  }, [loading, hasMore, page, category, sort, search])
 
   // Set up intersection observer for infinite scrolling
-  const lastMemeElementRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (loading) return
-
-      if (observer.current) observer.current.disconnect()
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          setPage((prev) => prev + 1)
-          // Don't call fetchMemes() directly here
-        }
-      })
-
-      if (node) observer.current.observe(node)
-    },
-    [loading, hasMore], // Remove fetchMemes from dependencies
-  )
+  const lastMemeElementRef = useCallback((node: HTMLDivElement | null) => {
+    if (loading || !hasMore) return;
+  
+    if (observer.current) observer.current.disconnect();
+  
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setPage((prev) => prev + 1);
+      }
+    });
+  
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
+  
 
   // Effect for URL params update
   useEffect(() => {
