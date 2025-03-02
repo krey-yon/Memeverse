@@ -265,7 +265,7 @@ export default function MemeUploader() {
                       src={preview || "/placeholder.svg"}
                       alt="Meme preview"
                       fill
-                      className="object-cover"
+                      className="object-fit"
                       layout="fill"
                       />
                     {caption && (
