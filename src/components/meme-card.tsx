@@ -61,7 +61,7 @@ export default function MemeCard({ meme }: MemeCardProps) {
 
       </CardContent>
 
-      <CardFooter className="p-1">
+      <CardFooter className="">
         <div className="flex items-center justify-between w-full">
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2" onClick={handleLike}>
             <Heart className={`h-5 w-5 ${liked ? "fill-red-500 text-red-500" : ""}`} />
