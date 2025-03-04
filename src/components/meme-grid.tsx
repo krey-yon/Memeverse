@@ -13,11 +13,11 @@ export default function MemeGrid({ memes }: MemeGridProps) {
         if (index === memes.length - 1) {
           return (
             <div key={meme.id}>
-              <MemeCard meme={meme} />
+              <MemeCard meme={meme} memeId={meme.id} authorId={meme.authorId} />
             </div>
           )
         } else {
-          return <MemeCard key={meme.id} meme={meme} />
+          return <MemeCard key={meme.id} meme={meme} memeId={meme.id} authorId={meme.authorId} />
         }
       })}
     </div>

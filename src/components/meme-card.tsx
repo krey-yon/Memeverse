@@ -9,23 +9,34 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import type { MemePost } from "@/components/meme-explorer"
+import { likeMeme } from "@/lib/api"
 
 interface MemeCardProps {
   meme: MemePost
+  memeId: string
+  authorId: string
 }
 
-export default function MemeCard({ meme }: MemeCardProps) {
+export default function MemeCard({ meme, memeId, authorId }: MemeCardProps) {
   const [liked, setLiked] = useState(false)
   const [likesCount, setLikesCount] = useState(meme.likes.length)
 
-  const handleLike = () => {
+  const handleLike = async () => {
+    // console.log(memeId, authorId)
+
+    const likes = await likeMeme(memeId, authorId)
+    console.log(likes)
+    console.log(likes.likesCount)
     // In a real app, you would call an API to like/unlike the meme
+    // if (liked) {
+    //   setLikesCount((prev) => prev - 1)
+    // } else {
+    //   setLikesCount((prev) => prev + 1)
+    // }
     if (liked) {
-      setLikesCount((prev) => prev - 1)
-    } else {
-      setLikesCount((prev) => prev + 1)
+      setLikesCount(likes.likesCount)
     }
-    setLiked(!liked)
+    setLiked(likes.liked)
   }
 
   return (
@@ -33,7 +44,7 @@ export default function MemeCard({ meme }: MemeCardProps) {
       <CardContent className="p-0 flex-grow">
         <div className="p-3 flex items-center gap-2">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={meme.author.image || "/placeholder.svg?height=32&width=32"} alt={meme.author.name} />
+            <AvatarImage src={meme.author.image || ""} alt={meme.author.name} />
             <AvatarFallback>{meme.author.name.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">

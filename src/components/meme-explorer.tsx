@@ -44,12 +44,15 @@ export default function MemeExplorer() {
   const initialSearch = searchParams?.get("search") || ""
 
   const [memes, setMemes] = useState<MemePost[]>([])
+  // const [ memeId, setMemeId ] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
   const [category, setCategory] = useState<CategoryOption>(initialCategory)
   const [sort, setSort] = useState<SortOption>(initialSort)
   const [search, setSearch] = useState(initialSearch)
+
+  // console.log(memes)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
