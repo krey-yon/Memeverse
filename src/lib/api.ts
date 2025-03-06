@@ -29,3 +29,22 @@ export async function getMemes(): Promise<MemePost[]> {
     return []; // Return empty array on error
   }
 }
+
+export async function likeMeme(memeId: string, userId: string): Promise<{ liked: boolean; likesCount: number }> {
+  try {
+    const response = await fetch(`/api/likes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ memeId, userId }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to like meme');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error("Error liking meme:", error);
+    return { liked: false, likesCount: 0 }; // Return default values on error
+  }
+}
