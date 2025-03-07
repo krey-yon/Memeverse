@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MemeGrid from "@/components/meme-grid"
 import { getMemes } from "@/lib/api"
+import { getMemesActions } from "@/actions/meme"
 
 export type MemePost = {
   id: string
@@ -106,7 +107,9 @@ export default function MemeExplorer() {
     setMemes([])
   }
 
-  // Fetch memes based on current filters
+ // Fetch memes based on current filters
+
+ // remove this
   const fetchMemes = useCallback(async () => {
     
     if (loading || !hasMore) return
@@ -129,13 +132,35 @@ export default function MemeExplorer() {
 
 
 
+    const fetchMemes2 = useCallback(async () => {
+    
+    if (loading || !hasMore) return
+
+    setLoading(true)
+    try {
+      const newMemes = await getMemesActions(sort);
+      if (newMemes.length === 0) {
+        setHasMore(false)
+      } else {
+        setMemes(newMemes)
+        setPage((prev) => prev + 1)
+      }
+    } catch (error) {
+      console.error("Error fetching memes:", error)
+    } finally {
+      setLoading(false)
+    }
+  }, [loading, hasMore, page, category, sort, search])
+
+
 
   // Effect for initial data fetch when filters change
   useEffect(() => {
     setMemes([])
     setPage(1)
     setHasMore(true)
-    fetchMemes()
+    fetchMemes() // remove this
+    fetchMemes2()
   }, [category, sort, search])
 
 
