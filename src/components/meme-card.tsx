@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useOptimistic, useTransition } from "react"
 import Image from "next/image"
 import { formatDistanceToNow } from "date-fns"
 import { Heart, MessageCircle, Share2 } from "lucide-react"
@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import type { MemePost } from "@/components/meme-explorer"
 import { likeMeme } from "@/lib/api"
+import { updateMemeLike } from "@/actions/meme"
 
 interface MemeCardProps {
   meme: MemePost
@@ -17,11 +18,65 @@ interface MemeCardProps {
   // authorId: string
 }
 
-export default function MemeCard({ meme  }: MemeCardProps) {
+export default function MemeCard({ meme }: MemeCardProps) {
 
   const [liked, setLiked] = useState(meme.liked || false)
   const [likesCount, setLikesCount] = useState(meme.likesCount || 0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const [internalState, setInternalState] = useState({
+    liked: meme.liked,
+    likesCount: meme.likesCount
+  });
+  
+  // Use optimistic updates on top of the internal state
+  const [optimisticState, addOptimistic] = useOptimistic(
+    internalState,
+    (state, newState) => ({ ...state, ...newState })
+  );
+  
+  const [isPending, startTransition] = useTransition();
+
+  // Sync internal state with incoming props, but only if they actually change
+
+  const handleNewLike = () => {
+    if (isPending) return;
+
+    // Calculate new state
+   
+    
+    startTransition(async () => {
+      const newLikedState = !optimisticState.liked;
+      const newLikesCount = newLikedState ? optimisticState.likesCount + 1 : optimisticState.likesCount - 1;
+      
+      // Apply optimistic update
+      addOptimistic({ liked: newLikedState, likesCount: newLikesCount });
+      try {
+        console.log("Calling server action...");
+        const result = await updateMemeLike(meme.id);
+        console.log("Server response:", result);
+        
+        if (result) {
+          // Update internal state (which persists between renders)
+          setInternalState({
+            liked: result.liked,
+            likesCount: result.likesCount
+          });
+          
+          // Also update optimistic state to match
+          addOptimistic({
+            liked: result.liked,
+            likesCount: result.likesCount
+          });
+        }
+      } catch (error) {
+        console.error("Error updating like:", error);
+        // Revert to the previous state
+        addOptimistic(internalState);
+      }
+    });
+  };
+
 
   useEffect(() => {
     setLiked(meme.liked || false)
@@ -29,18 +84,18 @@ export default function MemeCard({ meme  }: MemeCardProps) {
   }, [meme.liked, meme.likesCount])
 
   useEffect(() => {
-    const storedLiked = localStorage.getItem(`liked-${meme.id}`)
-    const storedLikesCount = localStorage.getItem(`likesCount-${meme.id}`)
-  
+    const storedLiked = localStorage.getItem(`liked-${meme.id}`);
+    const storedLikesCount = localStorage.getItem(`likesCount-${meme.id}`);
+
     if (storedLiked !== null && storedLiked !== "undefined") {
       setLiked(JSON.parse(storedLiked))
     }
-    
+
     if (storedLikesCount !== null && storedLikesCount !== "undefined") {
       setLikesCount(JSON.parse(storedLikesCount))
     }
   }, [meme.id])
-  
+
 
   const handleLike = async () => {
     if (isLoading) return
@@ -95,11 +150,11 @@ export default function MemeCard({ meme  }: MemeCardProps) {
           </div>
         </div>
 
-          {meme.caption && (
-            <div className="p-3">
-              <p className="text-sm">{meme.caption}</p>
-            </div>
-          )}
+        {meme.caption && (
+          <div className="p-3">
+            <p className="text-sm">{meme.caption}</p>
+          </div>
+        )}
         <div className="relative aspect-square bg-muted">
           <Image
             src={meme.imageUrl || "/placeholder.svg"}
@@ -117,6 +172,11 @@ export default function MemeCard({ meme  }: MemeCardProps) {
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2" onClick={handleLike}>
             <Heart className={`h-5 w-5 ${liked ? "fill-red-500 text-red-500" : ""}`} />
             <span>{Number.isNaN(likesCount) ? "0" : likesCount}</span>
+          </Button> 
+
+          <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2" onClick={handleNewLike}>
+            <Heart className={`h-5 w-5 ${optimisticState.liked ? "fill-red-500 text-red-500" : ""}`} />
+            <span>{Number.isNaN(optimisticState.likesCount) ? "0" : optimisticState.likesCount}</span>
           </Button>
 
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
