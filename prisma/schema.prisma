@@ -22,6 +22,7 @@ model User {
   createdAt DateTime @default(now())
   posts Post[]
   likes Like[]
+  comments Comment[]
 }
 
 model Post {
@@ -32,6 +33,17 @@ model Post {
   caption String?
   createdAt DateTime @default(now())
   likes Like[]
+  comments Comment[]
+}
+
+model Comment {
+  id String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meme Post @relation(fields: [memeId], references: [id], onDelete: Cascade)
+  userId String
+  memeId String
+  createdAt DateTime @default(now())
+  content String
 }
 
 model Like {
