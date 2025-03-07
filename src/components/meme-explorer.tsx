@@ -13,7 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MemeGrid from "@/components/meme-grid"
 import { getMemes } from "@/lib/api"
-import { getMemesActions } from "@/actions/meme"
+import { getFilterMeme, getMemesActions } from "@/actions/meme"
 
 export type MemePost = {
   id: string
@@ -150,7 +150,7 @@ export default function MemeExplorer() {
     } finally {
       setLoading(false)
     }
-  }, [loading, hasMore, page, category, sort, search])
+  }, [loading, hasMore, page, category, sort])
 
 
 
@@ -161,7 +161,18 @@ export default function MemeExplorer() {
     setHasMore(true)
     fetchMemes() // remove this
     fetchMemes2()
-  }, [category, sort, search])
+  }, [category, sort])
+
+  useEffect(() => {
+    if (!search) return; // Prevents clearing memes when search is empty
+    
+    async function getMeme() {
+      const res = await getFilterMeme(search);
+      setMemes(res);
+    }
+    
+    getMeme();
+  }, [search]);
 
 
   const handleGoToHome = () => {
