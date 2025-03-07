@@ -31,6 +31,7 @@ export type MemePost = {
   }
   liked?: boolean
   likesCount: number
+  commentsCount : number
 }
 
 export type SortOption = "likes" | "date" | "comments"

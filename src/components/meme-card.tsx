@@ -181,7 +181,7 @@ export default function MemeCard({ meme }: MemeCardProps) {
 
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
             <MessageCircle className="h-5 w-5" />
-            <span>{meme._count?.comments || 0}</span>
+            <span>{meme.commentsCount}</span>
           </Button>
 
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">

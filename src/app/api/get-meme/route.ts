@@ -26,7 +26,7 @@ export async function GET(request: Request) {
         author: true,
         likes : true,
         _count: {
-          select: { likes: true },
+          select: { likes: true, comments : true },
         },
       },
     });
@@ -43,6 +43,7 @@ export async function GET(request: Request) {
       caption: post.caption || undefined,
       createdAt: post.createdAt.toISOString(),
       likesCount: post._count.likes,
+      commentsCount : post._count.comments,
       liked: post.likes.some(like => like.userId === findUser.id),
       likes: [], // Add empty array to match meme-explorer type
     }));

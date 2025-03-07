@@ -12,6 +12,7 @@ export interface MemePost {
   caption?: string;
   createdAt: string;
   likesCount: number;
+  commentsCount : number
   likes: Array<{ id: string; userId: string }>; // Add this to match expected type
 }
 
