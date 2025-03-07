@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { formatDistanceToNow } from "date-fns"
 import { Heart, MessageCircle, Share2 } from "lucide-react"
@@ -13,30 +13,70 @@ import { likeMeme } from "@/lib/api"
 
 interface MemeCardProps {
   meme: MemePost
-  memeId: string
-  authorId: string
+  // memeId: string
+  // authorId: string
 }
 
-export default function MemeCard({ meme, memeId, authorId }: MemeCardProps) {
-  const [liked, setLiked] = useState(false)
-  const [likesCount, setLikesCount] = useState(meme.likes.length)
+export default function MemeCard({ meme  }: MemeCardProps) {
+
+  const [liked, setLiked] = useState(meme.liked || false)
+  const [likesCount, setLikesCount] = useState(meme.likesCount || 0)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setLiked(meme.liked || false)
+    setLikesCount(meme.likesCount || 0)
+  }, [meme.liked, meme.likesCount])
+
+  useEffect(() => {
+    const storedLiked = localStorage.getItem(`liked-${meme.id}`)
+    const storedLikesCount = localStorage.getItem(`likesCount-${meme.id}`)
+  
+    if (storedLiked !== null && storedLiked !== "undefined") {
+      setLiked(JSON.parse(storedLiked))
+    }
+    
+    if (storedLikesCount !== null && storedLikesCount !== "undefined") {
+      setLikesCount(JSON.parse(storedLikesCount))
+    }
+  }, [meme.id])
+  
 
   const handleLike = async () => {
-    // console.log(memeId, authorId)
+    if (isLoading) return
 
-    const likes = await likeMeme(memeId, authorId)
-    console.log(likes)
-    console.log(likes.likesCount)
-    // In a real app, you would call an API to like/unlike the meme
-    // if (liked) {
-    //   setLikesCount((prev) => prev - 1)
-    // } else {
-    //   setLikesCount((prev) => prev + 1)
-    // }
-    if (liked) {
-      setLikesCount(likes.likesCount)
+    // Optimistic update
+    const newLiked = !liked
+    const newLikesCount = newLiked ? likesCount + 1 : likesCount - 1
+
+    setLiked(newLiked)
+    setLikesCount(newLikesCount)
+    setIsLoading(true)
+
+    // Save to localStorage
+    localStorage.setItem(`liked-${meme.id}`, JSON.stringify(newLiked))
+    localStorage.setItem(`likesCount-${meme.id}`, JSON.stringify(newLikesCount))
+
+    try {
+      // Call API to update like status
+      const result = await likeMeme(meme.id, meme.authorId)
+
+      // Update with actual server response
+      setLiked(result.liked)
+      setLikesCount(result.likesCount)
+
+      // Save the new server response to localStorage
+      localStorage.setItem(`liked-${meme.id}`, JSON.stringify(result.liked))
+      localStorage.setItem(`likesCount-${meme.id}`, JSON.stringify(result.likesCount || 0))
+    } catch (error) {
+      // Revert to previous state if API call fails
+      setLiked(!newLiked) // Revert to previous liked state
+      setLikesCount(newLiked ? newLikesCount - 1 : newLikesCount + 1) // Revert like count
+
+      console.error("Error updating like status:", error)
+    } finally {
+      setIsLoading(false)
     }
-    setLiked(likes.liked)
   }
 
   return (
@@ -76,7 +116,7 @@ export default function MemeCard({ meme, memeId, authorId }: MemeCardProps) {
         <div className="flex items-center justify-between w-full">
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2" onClick={handleLike}>
             <Heart className={`h-5 w-5 ${liked ? "fill-red-500 text-red-500" : ""}`} />
-            <span>{likesCount}</span>
+            <span>{Number.isNaN(likesCount) ? "0" : likesCount}</span>
           </Button>
 
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
