@@ -6,7 +6,7 @@ interface Props {
 
 const CreateComment = ({memeId} : Props) => {
 
-    
+    console.log(memeId);
 
   return (
     <div>
