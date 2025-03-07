@@ -77,3 +77,42 @@ export const updateMemeLike = async (memeId: string) => {
       throw error;
     }
   };
+
+export const getComments = async (memeId : string) => {
+    try {
+      const user = await currentUser();
+      if (!user) return;
+  
+      const findUser = await prisma.user.findUnique({ where: { clerkId: user.id } });
+      if (!findUser) {
+        console.log("User not found");
+        return;
+      }
+      const comments = await prisma.comment.findMany({where : {id : memeId}});
+      return comments;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+}
+
+export const addComments = async (content : string, memeId : string) => {
+  try {
+    const user = await currentUser();
+      if (!user) return;
+  
+      const findUser = await prisma.user.findUnique({ where: { clerkId: user.id } });
+      if (!findUser) {
+        console.log("User not found");
+        return;
+      }
+    const newComment = await prisma.comment.create({data : {
+      content : content,
+      userId : findUser.id,
+      memeId : memeId
+    }})
+    return newComment;
+  } catch (error) {
+    console.log(error);
+  }
+}
