@@ -1,6 +1,8 @@
 "use client";
 
+import Footer from "@/components/Footer";
 import AboutUs from "@/pages/aboutUs-page";
+// import AboutUs from "@/pages/aboutUs-page";
 import HeroPage from "@/pages/hero-page";
 import  Seperation  from "@/pages/seperation";
 
@@ -10,6 +12,7 @@ export default function Home() {
        <HeroPage /> 
          <Seperation />    {/* We can remove marquee if not needed   */}
         <AboutUs /> {/* Building About Us page */}
+        <Footer />
     </div>
   );
 }

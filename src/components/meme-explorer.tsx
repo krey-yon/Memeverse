@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useCallback } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter  } from "next/navigation"
 import { debounce } from "lodash"
 import { Loader2 } from "lucide-react"
 
@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MemeGrid from "@/components/meme-grid"
-import { getMemes } from "@/lib/api"
+// import { getMemes } from "@/lib/api"
+import { getFilterMeme, getMemesActions } from "@/actions/meme"
 
 export type MemePost = {
   id: string
@@ -29,13 +30,16 @@ export type MemePost = {
   _count?: {
     comments: number
   }
+  liked?: boolean
+  likesCount: number
+  commentsCount : number
 }
 
 export type SortOption = "likes" | "date" | "comments"
-export type CategoryOption = "trending" | "new" | "classic" | "random"
+export type CategoryOption = "trending" | "new" | "oldest" | "random"
 
 export default function MemeExplorer() {
-  // const router = useRouter()
+  const router = useRouter()
   const searchParams = useSearchParams()
 
   // Get initial values from URL params or defaults
@@ -52,7 +56,27 @@ export default function MemeExplorer() {
   const [sort, setSort] = useState<SortOption>(initialSort)
   const [search, setSearch] = useState(initialSearch)
 
-  // console.log(memes)
+  const updateUrlParams = useCallback(() => {
+    const params = new URLSearchParams()
+  
+    if (category) params.set("category", category)
+    if (sort) params.set("sort", sort)
+    if (search) params.set("search", search)
+    else params.delete("search")
+  
+    const newParams = params.toString()
+    const currentParams = new URLSearchParams(searchParams?.toString()).toString()
+  
+    // Only update if params have changed
+    if (newParams !== currentParams) {
+      router.push(`?${newParams}`, { scroll: false })
+    }
+  }, [router, searchParams, category, sort, search]) // ✅ Added missing dependencies
+  
+
+  useEffect(() => {
+    updateUrlParams()
+  }, [updateUrlParams, category, sort, search])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -83,14 +107,38 @@ export default function MemeExplorer() {
     setMemes([])
   }
 
-  // Fetch memes based on current filters
-  const fetchMemes = useCallback(async () => {
+ // Fetch memes based on current filters
+
+ // remove this
+  // const fetchMemes = useCallback(async () => {
+    
+  //   if (loading || !hasMore) return
+
+  //   setLoading(true)
+  //   try {
+  //     const newMemes = await getMemes()
+  //     if (newMemes.length === 0) {
+  //       setHasMore(false)
+  //     } else {
+  //       setMemes(newMemes)
+  //       setPage((prev) => prev + 1)
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching memes:", error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }, [loading, hasMore, page, category, sort, search])
+
+
+
+    const fetchMemes2 = useCallback(async () => {
     
     if (loading || !hasMore) return
 
     setLoading(true)
     try {
-      const newMemes = await getMemes()
+      const newMemes = await getMemesActions(sort);
       if (newMemes.length === 0) {
         setHasMore(false)
       } else {
@@ -102,8 +150,7 @@ export default function MemeExplorer() {
     } finally {
       setLoading(false)
     }
-  }, [loading, hasMore, page, category, sort, search])
-
+  }, [loading, hasMore, page, category, sort])
 
 
 
@@ -112,14 +159,30 @@ export default function MemeExplorer() {
     setMemes([])
     setPage(1)
     setHasMore(true)
-    fetchMemes()
-  }, [category, sort, search])
+    // fetchMemes() // remove this
+    fetchMemes2()
+  }, [category, sort])
 
+  useEffect(() => {
+    if (!search) return; // Prevents clearing memes when search is empty
+    
+    async function getMeme() {
+      const res = await getFilterMeme(search);
+      setMemes(res);
+    }
+    
+    getMeme();
+  }, [search]);
+
+
+  const handleGoToHome = () => {
+    router.push('/')
+  }
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">Meme Explorer</h1>
+        <h1 className="text-3xl font-bold tracking-tight cursor-pointer" onClick={handleGoToHome}>Meme Explorer</h1>
 
         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
           <div className="w-full md:w-1/3">
@@ -134,10 +197,10 @@ export default function MemeExplorer() {
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             <Tabs defaultValue={category} onValueChange={handleCategoryChange} className="w-full sm:w-auto">
               <TabsList className="grid grid-cols-4 w-full">
-                <TabsTrigger value="trending">Trending</TabsTrigger>
-                <TabsTrigger value="new">New</TabsTrigger>
-                <TabsTrigger value="classic">Classic</TabsTrigger>
-                <TabsTrigger value="random">Random</TabsTrigger>
+                <TabsTrigger value="trending" onClick={ () => setCategory("trending")}>Trending</TabsTrigger>
+                <TabsTrigger value="new" onClick={() => setCategory('new')}>New</TabsTrigger>
+                <TabsTrigger value="classic" onClick={() => setCategory('oldest')}>Oldest</TabsTrigger>
+                <TabsTrigger value="random" onClick={() => setCategory('random')}>Random</TabsTrigger>
               </TabsList>
             </Tabs>
 
