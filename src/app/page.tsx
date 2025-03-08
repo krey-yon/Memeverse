@@ -7,9 +7,9 @@ import  Seperation  from "@/pages/seperation";
 export default function Home() {
   return (
     <div className="flex flex-col bg-amber-500">
-        <HeroPage />
-        <Seperation />    {/* We can remove marquee if not needed   */}
-        {/* <AboutUs /> */} {/* Building About Us page */}
+       <HeroPage /> 
+         <Seperation />    {/* We can remove marquee if not needed   */}
+        <AboutUs /> {/* Building About Us page */}
     </div>
   );
 }

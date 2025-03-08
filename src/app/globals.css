@@ -15,6 +15,13 @@
   font-family: var(--font-jaro);
 }
 
+
+.text-shadow-gray{
+  text-shadow: 0px 2px 3px rgb(123, 114, 114);
+}
+.text-shadow-gray-large{
+  text-shadow: 0px 3px 4px rgb(123, 114, 114);
+}
 /* ----- Marquee animation */
 
 @keyframes marquee {
