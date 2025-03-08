@@ -89,6 +89,54 @@ switch (filter) {
   }
 }
 
+export const getFilterMeme = async (filter : string) => {
+  try {
+    const user = await currentUser();
+    if (!user) {
+      return [];
+    }
+    const findUser = await prisma.user.findUnique({ where: { clerkId: user.id } });
+    if (!findUser) {
+      console.log("user not found");
+      return [];
+    }
+    const posts = await  prisma.post.findMany({
+      include: {
+        author: true,
+        likes: true,
+        _count: {
+          select: { likes: true, comments: true },
+        },
+      },
+      where : {
+        caption : {
+          contains : filter,
+          mode : "insensitive"
+        }
+      }
+    })
+    const formattedPosts = posts.map(post => ({
+      id: post.id,
+      authorId: post.authorId,
+      author: {
+        id: post.author.id,
+        name: post.author.name || "Unknown",
+      },
+      imageUrl: post.imageUrl,
+      caption: post.caption || undefined,
+      createdAt: post.createdAt.toISOString(),
+      likesCount: post._count.likes,
+      commentsCount: post._count.comments,
+      liked: post.likes.some(like => like.userId === findUser.id),
+      likes: [], // Add empty array to match meme-explorer type
+    }));
+    return formattedPosts;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
 export const uploadMeme = async (imageUrl: string, caption: string) => {
   try {
     const user = await currentUser();
