@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MemeGrid from "@/components/meme-grid"
-import { getMemes } from "@/lib/api"
+// import { getMemes } from "@/lib/api"
 import { getFilterMeme, getMemesActions } from "@/actions/meme"
 
 export type MemePost = {
@@ -110,25 +110,25 @@ export default function MemeExplorer() {
  // Fetch memes based on current filters
 
  // remove this
-  const fetchMemes = useCallback(async () => {
+  // const fetchMemes = useCallback(async () => {
     
-    if (loading || !hasMore) return
+  //   if (loading || !hasMore) return
 
-    setLoading(true)
-    try {
-      const newMemes = await getMemes()
-      if (newMemes.length === 0) {
-        setHasMore(false)
-      } else {
-        setMemes(newMemes)
-        setPage((prev) => prev + 1)
-      }
-    } catch (error) {
-      console.error("Error fetching memes:", error)
-    } finally {
-      setLoading(false)
-    }
-  }, [loading, hasMore, page, category, sort, search])
+  //   setLoading(true)
+  //   try {
+  //     const newMemes = await getMemes()
+  //     if (newMemes.length === 0) {
+  //       setHasMore(false)
+  //     } else {
+  //       setMemes(newMemes)
+  //       setPage((prev) => prev + 1)
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching memes:", error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }, [loading, hasMore, page, category, sort, search])
 
 
 
@@ -159,7 +159,7 @@ export default function MemeExplorer() {
     setMemes([])
     setPage(1)
     setHasMore(true)
-    fetchMemes() // remove this
+    // fetchMemes() // remove this
     fetchMemes2()
   }, [category, sort])
 

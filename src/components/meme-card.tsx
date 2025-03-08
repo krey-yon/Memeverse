@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useOptimistic, useTransition } from "react"
+import { useState, useOptimistic, useTransition } from "react"
 import Image from "next/image"
 import { formatDistanceToNow } from "date-fns"
 import { Heart, MessageCircle, Share2 } from "lucide-react"
@@ -9,7 +9,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import type { MemePost } from "@/components/meme-explorer"
-import { likeMeme } from "@/lib/api"
+// import { likeMeme } from "@/lib/api"
 import { updateMemeLike } from "@/actions/meme"
 
 interface MemeCardProps {
@@ -20,9 +20,9 @@ interface MemeCardProps {
 
 export default function MemeCard({ meme }: MemeCardProps) {
 
-  const [liked, setLiked] = useState(meme.liked || false)
-  const [likesCount, setLikesCount] = useState(meme.likesCount || 0)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  // const [liked, setLiked] = useState(meme.liked || false)
+  // const [likesCount, setLikesCount] = useState(meme.likesCount || 0)
+  // const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [internalState, setInternalState] = useState({
     liked: meme.liked,
@@ -32,7 +32,7 @@ export default function MemeCard({ meme }: MemeCardProps) {
   // Use optimistic updates on top of the internal state
   const [optimisticState, addOptimistic] = useOptimistic(
     internalState,
-    (state, newState) => ({ ...state, ...newState })
+    (state, newState: typeof internalState) => ({ ...state, ...newState })
   );
   
   const [isPending, startTransition] = useTransition();
@@ -78,61 +78,61 @@ export default function MemeCard({ meme }: MemeCardProps) {
   };
 
 
-  useEffect(() => {
-    setLiked(meme.liked || false)
-    setLikesCount(meme.likesCount || 0)
-  }, [meme.liked, meme.likesCount])
+  // useEffect(() => {
+  //   setLiked(meme.liked || false)
+  //   setLikesCount(meme.likesCount || 0)
+  // }, [meme.liked, meme.likesCount])
 
-  useEffect(() => {
-    const storedLiked = localStorage.getItem(`liked-${meme.id}`);
-    const storedLikesCount = localStorage.getItem(`likesCount-${meme.id}`);
+  // useEffect(() => {
+  //   const storedLiked = localStorage.getItem(`liked-${meme.id}`);
+  //   const storedLikesCount = localStorage.getItem(`likesCount-${meme.id}`);
 
-    if (storedLiked !== null && storedLiked !== "undefined") {
-      setLiked(JSON.parse(storedLiked))
-    }
+  //   if (storedLiked !== null && storedLiked !== "undefined") {
+  //     setLiked(JSON.parse(storedLiked))
+  //   }
 
-    if (storedLikesCount !== null && storedLikesCount !== "undefined") {
-      setLikesCount(JSON.parse(storedLikesCount))
-    }
-  }, [meme.id])
+  //   if (storedLikesCount !== null && storedLikesCount !== "undefined") {
+  //     setLikesCount(JSON.parse(storedLikesCount))
+  //   }
+  // }, [meme.id])
 
 
-  const handleLike = async () => {
-    if (isLoading) return
+  // const handleLike = async () => {
+  //   if (isLoading) return
 
-    // Optimistic update
-    const newLiked = !liked
-    const newLikesCount = newLiked ? likesCount + 1 : likesCount - 1
+  //   // Optimistic update
+  //   const newLiked = !liked
+  //   const newLikesCount = newLiked ? likesCount + 1 : likesCount - 1
 
-    setLiked(newLiked)
-    setLikesCount(newLikesCount)
-    setIsLoading(true)
+  //   setLiked(newLiked)
+  //   setLikesCount(newLikesCount)
+  //   setIsLoading(true)
 
-    // Save to localStorage
-    localStorage.setItem(`liked-${meme.id}`, JSON.stringify(newLiked))
-    localStorage.setItem(`likesCount-${meme.id}`, JSON.stringify(newLikesCount))
+  //   // Save to localStorage
+  //   localStorage.setItem(`liked-${meme.id}`, JSON.stringify(newLiked))
+  //   localStorage.setItem(`likesCount-${meme.id}`, JSON.stringify(newLikesCount))
 
-    try {
-      // Call API to update like status
-      const result = await likeMeme(meme.id, meme.authorId)
+  //   try {
+  //     // Call API to update like status
+  //     const result = await likeMeme(meme.id, meme.authorId)
 
-      // Update with actual server response
-      setLiked(result.liked)
-      setLikesCount(result.likesCount)
+  //     // Update with actual server response
+  //     setLiked(result.liked)
+  //     setLikesCount(result.likesCount)
 
-      // Save the new server response to localStorage
-      localStorage.setItem(`liked-${meme.id}`, JSON.stringify(result.liked))
-      localStorage.setItem(`likesCount-${meme.id}`, JSON.stringify(result.likesCount || 0))
-    } catch (error) {
-      // Revert to previous state if API call fails
-      setLiked(!newLiked) // Revert to previous liked state
-      setLikesCount(newLiked ? newLikesCount - 1 : newLikesCount + 1) // Revert like count
+  //     // Save the new server response to localStorage
+  //     localStorage.setItem(`liked-${meme.id}`, JSON.stringify(result.liked))
+  //     localStorage.setItem(`likesCount-${meme.id}`, JSON.stringify(result.likesCount || 0))
+  //   } catch (error) {
+  //     // Revert to previous state if API call fails
+  //     setLiked(!newLiked) // Revert to previous liked state
+  //     setLikesCount(newLiked ? newLikesCount - 1 : newLikesCount + 1) // Revert like count
 
-      console.error("Error updating like status:", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  //     console.error("Error updating like status:", error)
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
 
   return (
     <Card className="overflow-hidden h-full flex flex-col">
@@ -169,10 +169,10 @@ export default function MemeCard({ meme }: MemeCardProps) {
 
       <CardFooter className="">
         <div className="flex items-center justify-between w-full">
-          <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2" onClick={handleLike}>
+          {/* <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2" onClick={handleLike}>
             <Heart className={`h-5 w-5 ${liked ? "fill-red-500 text-red-500" : ""}`} />
             <span>{Number.isNaN(likesCount) ? "0" : likesCount}</span>
-          </Button> 
+          </Button>  */}
 
           <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2" onClick={handleNewLike}>
             <Heart className={`h-5 w-5 ${optimisticState.liked ? "fill-red-500 text-red-500" : ""}`} />
