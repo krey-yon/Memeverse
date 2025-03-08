@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="flex flex-col bg-amber-500">
        <HeroPage /> 
-         <Seperation />    {/* We can remove marquee if not needed   */}
+         <Seperation />    
         <AboutUs /> {/* Building About Us page */}
         <Footer />
     </div>

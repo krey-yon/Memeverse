@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const AboutUs = () => {
   return (
-    <div className="bg-[#FFCA7A] flex flex-col ">
-      <div className="  flex flex-col content-center mt-10">
+    <div className="bg-[#FFCA7A] flex flex-col relative">
+      <div className="flex flex-col content-center mt-10">
         <div className=" my-[43px] mx-[162px]">
           <div className="justify-between mb-0 flex">
             <div className=" flex relative">
