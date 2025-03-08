@@ -1,42 +1,77 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useClerk, UserButton, useUser } from "@clerk/nextjs";
 import Link from 'next/link';
+import Image from "next/image";
 // import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
-
+  const [menuOpen, setMenuOpen] = useState(false);
     const { openSignIn } = useClerk();
     const { isSignedIn } = useUser();
     // const router = useRouter();
 
   return (
-    <div className="flex justify-between items-center p-4">
-      <div className="font-extrabold text-2xl creepster-regular text-white">
+     <nav className="flex justify-between items-center p-4 ">
+      <div className="font-extrabold text-2xl creepster-regular text-white ml-2">
         MEME<span className="text-orange-600">VERSE</span>
       </div>
-      <div className="flex items-center space-x-4 gap-4">
-        <ul className="flex space-x-4 text-lg font-bold cursor-pointer">
-          <li className="text-white"><Link href="/meme-upload">Create Memes</Link></li>
-          <li className="text-white"><Link href="/explorer-page">Explore</Link></li>
-          <li className="text-white"><Link href="/">About us</Link></li>
-          <li className="text-white"><Link href="/">Leaderboard</Link></li>
+
+      {/* desktop display */}
+      <div className="hidden md:flex items-center space-x-4 gap-4">
+        <ul className="flex space-x-8 text-lg font-bold cursor-pointer jaro-regular ">
+          <li className="text-white jaro-regular"><Link href="/meme-upload">Create Memes</Link></li>
+          <li className="text-white jaro-regular"><Link href="/explorer-page">Explore</Link></li>
+          <li className="text-white jaro-regular"><Link href="/about-us">About us</Link></li>
+          <li className="text-white jaro-regular"><Link href="/">Leaderboard</Link></li>
         </ul>
         {isSignedIn ? (
           <UserButton />
         ) : (
           <button
             onClick={() => openSignIn()}
-            className="bg-orange-600 rounded-md text-white px-2 py-1 cursor-pointer"
+            className="bg-orange-600 rounded-md text-white px-3 py-1 cursor-pointer jaro-regular"
           >
             Sign in
           </button>
         )}
-        {/* <button className="bg-orange-600 rounded-md text-white px-2 py-1 cursor-pointer">
-          Sign up
-        </button> */}
       </div>
-    </div>
+
+      {/* Mobile Menu Button */}
+      <div className="md:hidden">
+        <button onClick={() => setMenuOpen(!menuOpen)}>
+          <Image
+            src={"/svgs/hamburger.svg"} // Replace with your three-bars icon
+            width={30}
+            height={30}
+            alt="Menu"
+          />
+        </button>
+      </div>
+
+      {/*for sm (phone)*/}
+      
+      {menuOpen && (
+        <div className="absolute top-16 right-4 z-10 bg-[#FF9900] w-48 p-4 rounded-lg shadow-lg md:hidden">
+          <ul className="flex flex-col space-y-3 text-lg font-bold cursor-pointer jaro-regular">
+            <li><Link href="/meme-upload" className="text-white jaro-regular">Create Memes</Link></li>
+            <li><Link href="/explorer-page" className="text-white jaro-regular">Explore</Link></li>
+            <li><Link href="/about-us" className="text-white jaro-regular">About us</Link></li>
+            <li><Link href="/" className="text-white jaro-regular">Leaderboard</Link></li>
+          </ul>
+          {isSignedIn ? (
+            <UserButton />
+          ) : (
+            <button
+              onClick={() => openSignIn()}
+              className="bg-orange-600 rounded-md text-white px-3 py-1 cursor-pointer w-full mt-3 jaro-regular"
+            >
+              Sign in
+            </button>
+          )}
+        </div>
+      )}
+    </nav>
   );
 };
 
