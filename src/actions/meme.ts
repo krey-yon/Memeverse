@@ -222,7 +222,7 @@ export const getComments = async (memeId: string) => {
       console.log("User not found");
       return;
     }
-    const comments = await prisma.comment.findMany({ where: { id: memeId } });
+    const comments = await prisma.comment.findMany({ where: { memeId: memeId } });
     console.log(comments);
     return comments;
   } catch (error) {
