@@ -100,7 +100,7 @@ export default function CommentModal( {open, setOpen, optimisticState, meme} : a
                 <div className="flex gap-3">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={meme.author.avatar} alt={meme.author.name} />
-                    <AvatarFallback>{meme.author.initials}</AvatarFallback>
+                    <AvatarFallback>{meme.author.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     <div className="flex justify-between items-start">
@@ -116,7 +116,7 @@ export default function CommentModal( {open, setOpen, optimisticState, meme} : a
 
           <div className="flex gap-3 mt-4">
             <Avatar className="h-8 w-8">
-              <AvatarFallback>YO</AvatarFallback>
+              <AvatarFallback>{meme.author.name.substring(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
             <div className="flex-1 space-y-2 flex gap-3">
               <Textarea
