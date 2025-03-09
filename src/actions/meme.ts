@@ -223,6 +223,7 @@ export const getComments = async (memeId: string) => {
       return;
     }
     const comments = await prisma.comment.findMany({ where: { id: memeId } });
+    console.log(comments);
     return comments;
   } catch (error) {
     console.log(error);
