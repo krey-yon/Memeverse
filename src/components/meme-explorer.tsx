@@ -56,6 +56,8 @@ export default function MemeExplorer() {
   const [sort, setSort] = useState<SortOption>(initialSort)
   const [search, setSearch] = useState(initialSearch)
 
+  console.log(page);
+
   const updateUrlParams = useCallback(() => {
     const params = new URLSearchParams()
   
@@ -150,7 +152,7 @@ export default function MemeExplorer() {
     } finally {
       setLoading(false)
     }
-  }, [loading, hasMore, page, category, sort])
+  }, [loading, hasMore, sort])
 
 
 

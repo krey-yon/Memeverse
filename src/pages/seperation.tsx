@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 
  const Seperation = () => {
     const texts = ["memes","memes","memes","memes","memes","memes","memes"]

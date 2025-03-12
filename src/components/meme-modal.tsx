@@ -20,7 +20,7 @@ interface Comment {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function CommentModal( {open, setOpen, optimisticState, meme} : any ) {
+export default function CommentModal({ open, setOpen, optimisticState, meme }: any) {
   const [comments, setComments] = useState<Comment[]>([])
 
   const [newComment, setNewComment] = useState("")
@@ -32,7 +32,7 @@ export default function CommentModal( {open, setOpen, optimisticState, meme} : a
       const formattedComments = comments.map((comment) => ({
         id: comment.id,
         author: {
-          userId : comment.userId,
+          userId: comment.userId,
         },
         content: comment.content,
         timestamp: new Date(comment.createdAt).toLocaleTimeString(),
@@ -42,10 +42,8 @@ export default function CommentModal( {open, setOpen, optimisticState, meme} : a
   }
 
   useEffect(() => {
-    if (open) {
-      fetchComments()
-    }
-  }, [open])
+    fetchComments()
+  }, [])
 
   const handleAddComment = async () => {
     if (newComment.trim() === "") return
@@ -71,65 +69,65 @@ export default function CommentModal( {open, setOpen, optimisticState, meme} : a
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Comments</DialogTitle>
-            <div className="flex items-center gap-4 mt-2">
-              <div className="flex items-center gap-1">
-                <MessageSquare className="h-4 w-4" />
-                <span className="text-sm font-medium">{comments.length}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Heart
-                  className={`h-4 w-4 cursor-pointer ${optimisticState.liked ? "fill-red-500 text-red-500" : ""}`}
-                />
-                <span className="text-sm font-medium">{optimisticState.likesCount}</span>
-              </div>
-              <Button variant="ghost" size="sm" className="ml-auto" onClick={handleShare}>
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Comments</DialogTitle>
+          <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center gap-1">
+              <MessageSquare className="h-4 w-4" />
+              <span className="text-sm font-medium">{comments.length}</span>
             </div>
-          </DialogHeader>
-
-          <Separator className="my-4" />
-
-          <div className="max-h-[300px] overflow-y-auto pr-1">
-            {comments.map((comment) => (
-              <Card key={comment.id} className="p-4 mb-3">
-                <div className="flex gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={meme.author.avatar} alt={meme.author.name} />
-                    <AvatarFallback>{meme.author.name.substring(0, 2).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start">
-                      <p className="font-medium text-sm">{meme.author.name}</p>
-                      <span className="text-xs text-muted-foreground">{comment.timestamp}</span>
-                    </div>
-                    <p className="text-sm mt-1">{comment.content}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-
-          <div className="flex gap-3 mt-4">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback>{meme.author.name.substring(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 space-y-2 flex gap-3">
-              <Textarea
-                placeholder="Add a comment..."
-                className="resize-none"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
+            <div className="flex items-center gap-1">
+              <Heart
+                className={`h-4 w-4 cursor-pointer ${optimisticState.liked ? "fill-red-500 text-red-500" : ""}`}
               />
-              <Button className="translate-y-3" onClick={handleAddComment}>Post</Button>
+              <span className="text-sm font-medium">{optimisticState.likesCount}</span>
             </div>
+            <Button variant="ghost" size="sm" className="ml-auto" onClick={handleShare}>
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </DialogHeader>
+
+        <Separator className="my-4" />
+
+        <div className="max-h-[300px] overflow-y-auto pr-1">
+          {comments.map((comment) => (
+            <Card key={comment.id} className="p-4 mb-3">
+              <div className="flex gap-3">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={meme.author.avatar} alt={meme.author.name} />
+                  <AvatarFallback>{meme.author.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <p className="font-medium text-sm">{meme.author.name}</p>
+                    <span className="text-xs text-muted-foreground">{comment.timestamp}</span>
+                  </div>
+                  <p className="text-sm mt-1">{comment.content}</p>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <div className="flex gap-3 mt-4">
+          <Avatar className="h-8 w-8">
+            <AvatarFallback>{meme.author.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 space-y-2 flex gap-3">
+            <Textarea
+              placeholder="Add a comment..."
+              className="resize-none"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <Button className="translate-y-3" onClick={handleAddComment}>Post</Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 
