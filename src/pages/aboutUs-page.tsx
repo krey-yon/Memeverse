@@ -47,7 +47,7 @@ const AboutUs = () => {
                   <span className="jaro-regular text-[20px] text-white text-shadow-gray-large">
                     At Memeverse, we believe that laughter is the best way to
                     connect people! Our platform lets you create, customize, and
-                    share memes effortlessly— whether you're a casual scroller
+                    share memes effortlessly— whether you&apos;re a casual scroller
                     or a meme lord.
                   </span>
                   <br />
