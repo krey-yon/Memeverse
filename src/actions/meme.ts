@@ -253,3 +253,4 @@ export const addComments = async (content: string, memeId: string) => {
     console.log(error);
   }
 }
+

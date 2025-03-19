@@ -1,15 +1,18 @@
 "use client";
 import React, { useState } from "react";
-import { useClerk, UserButton, useUser } from "@clerk/nextjs";
+import {  UserButton } from "@clerk/nextjs";
 import Link from 'next/link';
 import Image from "next/image";
-// import { useRouter } from 'next/navigation';
+//import { useRouter } from "next/router";
+ import { useRouter } from 'next/navigation';
 
-const Navbar = () => {
+const Navbar = ({isSignedIn} : {isSignedIn : boolean}) => {
   const [menuOpen, setMenuOpen] = useState(false);
-    const { openSignIn } = useClerk();
-    const { isSignedIn } = useUser();
+   // const { openSignIn } = useClerk();
+   // const { isSignedIn } = useUser();
     // const router = useRouter();
+
+    const router = useRouter()
 
   return (
      <nav className="flex justify-between items-center p-4 ">
@@ -29,7 +32,7 @@ const Navbar = () => {
           <UserButton />
         ) : (
           <button
-            onClick={() => openSignIn()}
+            onClick={() => router.push("/auth/sign-in")}
             className="bg-orange-600 rounded-md text-white px-3 py-1 cursor-pointer jaro-regular"
           >
             Sign in
@@ -60,15 +63,15 @@ const Navbar = () => {
             <li><Link href="/" className="text-white jaro-regular">Leaderboard</Link></li>
           </ul>
           {isSignedIn ? (
-            <UserButton />
-          ) : (
-            <button
-              onClick={() => openSignIn()}
-              className="bg-orange-600 rounded-md text-white px-3 py-1 cursor-pointer w-full mt-3 jaro-regular"
-            >
-              Sign in
-            </button>
-          )}
+          <UserButton />
+        ) : (
+          <button
+            onClick={() => router.push("/auth/sign-in")}
+            className="bg-orange-600 rounded-md text-white px-3 py-1 cursor-pointer jaro-regular"
+          >
+            Sign in
+          </button>
+        )}
         </div>
       )}
     </nav>
