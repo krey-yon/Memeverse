@@ -1,9 +1,9 @@
 "use server";
 
+import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
-import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+
 
 export const onAuthenticateUser = async () => {
     try {
