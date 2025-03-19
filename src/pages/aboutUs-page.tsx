@@ -35,7 +35,7 @@ const AboutUs = () => {
 
             <div className=" p-2 w-3/5 ml-20 flex items-center justify-center">
               <div className="flex flex-col items-start ">
-                <div className="relative p-2   text-center flex flex-col items-center justify-center">
+                <div className="relative p-2   text-center flex flex-col items-center justify-center mr-14 ">
                   <span className="text-4xl creepster-regular text-white text-shadow-gray">
                     <span className="creepster-regular text-[#FF9900] text-shadow-gray tracking-wide">
                       About Us
