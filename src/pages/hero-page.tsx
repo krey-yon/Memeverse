@@ -31,10 +31,10 @@ const HeroPage = () => {
           className="z-0 absolute w-[250px] sm:w-[250px] md:w-[300px] h-auto mt-2"
         />
         <div className="flex flex-col justify-center items-center z-10 px-4">
-          <h1 className="text-3xl sm:text-3xl md:text-4xl font-bold creepster-regular text-white">
+          <h1 className="text-3xl sm:text-3xl md:text-6xl font-bold creepster-regular text-white">
             Create, Share & Go Viral!
           </h1>
-          <p className="text-sm sm:text-base md:text-xl text-center py-4 text-white jaro-regular">
+          <p className="text-sm sm:text-base md:text-2xl text-center py-4 text-white jaro-regular">
             Unleash your creativity with our easy-to-use meme <br className="hidden md:block" />
             generator. Make memes, share laughs, <br className="hidden md:block" />
             and become an internet sensation!
