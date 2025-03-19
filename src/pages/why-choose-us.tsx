@@ -34,7 +34,7 @@ export default function WhyChooseUs() {
           aria-hidden="true"
         />
       </div>
-      <div className="absolute bottom-0 right-1/4 w-40 h-40 md:w-56 md:h-56 opacity-30">
+      <div className="absolute bottom-0 right-1/4 w-40 h-40 md:w-56 md:h-56 opacity-30 hidden">
         <Image
           src="/image/bginwhychooseus.png"
           alt=""
@@ -75,7 +75,7 @@ export default function WhyChooseUs() {
         </div>
 
         {/* Timeline */}
-        <div className="relative mb-16">
+        <div className="relative mb-16 hidden">
           <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-red-500 -translate-y-1/2 z-0"></div>
           <div className="flex justify-between items-center">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-500 text-white font-bold z-10">
