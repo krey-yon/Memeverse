@@ -5,37 +5,37 @@ export default function TrendingMemes() {
   return (
     <div className="relative w-full bg-orange-500 px-4 py-12 overflow-hidden">
       {/* Background decorative elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 -translate-x-1/4">
+      <div className="absolute top-0 left-0 w-64 h-64 -translate-x-1/4 hidden md:block">
         <Image
           src="/image/bgintrendingpage.png"
           alt=""
           width={256}
           height={256}
-          className="w-full h-full"
+          className="w-full h-full "
           aria-hidden="true"
         />
       </div>
-      <div className="absolute top-0 right-0 w-64 h-64 translate-x-1/4">
+      <div className="absolute top-0 right-0 w-64 h-64 translate-x-1/4 hidden md:block">
         <Image
           src="/image/bgintrendingpage.png"
           alt=""
           width={256}
           height={256}
-          className="w-full h-full"
+          className="w-full h-full "
           aria-hidden="true"
         />
       </div>
-      <div className="absolute bottom-0 left-1/4 w-64 h-64 -translate-x-1/2 translate-y-1/4">
+      <div className="absolute bottom-0 left-1/4 w-64 h-64 -translate-x-1/2 translate-y-1/4 hidden lg:block">
         <Image
           src="/image/bgintrendingpage.png"
           alt=""
           width={256}
           height={256}
-          className="w-full h-full"
+          className="w-full h-full "
           aria-hidden="true"
         />
       </div>
-      <div className="absolute bottom-0 right-1/4 w-64 h-64  translate-x-1/2 translate-y-1/4">
+      <div className="absolute bottom-0 right-1/4 w-64 h-64  translate-x-1/2 translate-y-1/4 hidden lg:block">
         <Image
           src="/image/bgintrendingpage.png"
           alt=""
@@ -79,6 +79,7 @@ export default function TrendingMemes() {
             alt="Meme 1"
             width={400}
             height={400}
+            className="w-full h-full"
             />
           </div>
           <div className="bg-orange-200 rounded-lg p-4 aspect-square">
@@ -87,6 +88,7 @@ export default function TrendingMemes() {
             alt="Meme 1"
             width={400}
             height={400}
+            className="w-full h-full"
             />
           </div>
           <div className="bg-orange-200 rounded-lg p-4 aspect-square">
@@ -95,6 +97,7 @@ export default function TrendingMemes() {
             alt="Meme 1"
             width={400}
             height={400}
+            className="w-full h-full"
             />
           </div>
         </div>
