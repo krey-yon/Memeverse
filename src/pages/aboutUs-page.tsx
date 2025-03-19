@@ -5,9 +5,9 @@ const AboutUs = () => {
     <div className="bg-[#FFCA7A] flex flex-col relative">
       <div className="flex flex-col content-center mt-10">
         <div className=" my-[43px] mx-[162px]">
-          <div className="justify-between mb-0 flex">
+          <div className="lg:justify-between mb-0 flex flex-col lg:flex-row items-center justify-center">
             <div className=" flex relative">
-              <div className="bg-[#FF9900] h-[355px] w-[355px] rounded-3xl items-center justify-center flex shadow-[#e6b85c] shadow-xl ">
+              <div className="bg-[#FF9900] h-[350px] w-[350px] rounded-3xl items-center justify-center flex shadow-[#e6b85c] shadow-xl ">
                 <Image
                   src={"/image/pepeCry-image.png"}
                   height={240}
@@ -15,7 +15,7 @@ const AboutUs = () => {
                   alt="Pepe-Cry image"
                 />
               </div>
-              <div className=" absolute top-[-50px] right-[-120px] flex flex-col items-center justify-center">
+              <div className="hidden absolute top-[-50px] right-[-120px] lg:flex flex-col items-center justify-center">
                 <Image
                   src={"/image/cloud.png"}
                   height={150}
@@ -33,9 +33,9 @@ const AboutUs = () => {
               </div>
             </div>
 
-            <div className=" p-2 w-3/5 ml-20">
+            <div className=" p-2 w-3/5 ml-20 flex items-center justify-center">
               <div className="flex flex-col items-start ">
-                <div className="relative p-2   text-center flex flex-col items-center justify-center">
+                <div className="relative p-2   text-center flex flex-col items-center justify-center mr-14 ">
                   <span className="text-4xl creepster-regular text-white text-shadow-gray">
                     <span className="creepster-regular text-[#FF9900] text-shadow-gray tracking-wide">
                       About Us
@@ -70,7 +70,7 @@ const AboutUs = () => {
                   height={295}
                   width={215}
                   alt="crazy scientist"
-                  className="mt-2  absolute right-[70px] top-[190px] opacity-40"
+                  className="mt-2 hidden md:block absolute right-[70px] top-[190px] opacity-40"
                 />
               </div>
             </div>

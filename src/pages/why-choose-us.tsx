@@ -34,7 +34,7 @@ export default function WhyChooseUs() {
           aria-hidden="true"
         />
       </div>
-      <div className="absolute bottom-0 right-1/4 w-40 h-40 md:w-56 md:h-56 opacity-30">
+      <div className="absolute bottom-0 right-1/4 w-40 h-40 md:w-56 md:h-56 opacity-30 hidden md:block">
         <Image
           src="/image/bginwhychooseus.png"
           alt=""
@@ -60,7 +60,7 @@ export default function WhyChooseUs() {
           Why choose <span className="text-red-500">us</span>?
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="flex flex-col md:flex-row gap-y-9 justify-between items-center mb-16">
           {/* Card 1 */}
           <div className="bg-orange-600 rounded-xl p-6 w-2xs text-white shadow-lg">
             <h3 className="text-2xl font-bold mb-3">Easy-to-Use Editor</h3>
@@ -68,14 +68,14 @@ export default function WhyChooseUs() {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-orange-600 rounded-xl p-6 w-3xs text-white shadow-lg translate-x-[550px]">
+          <div className="bg-orange-600 rounded-xl p-6 w-2xs text-white shadow-lg">
             <h3 className="text-2xl font-bold mb-3">Share Instantly</h3>
             <p>Post your memes on social media  or download <br /> them to share anywhere.</p>
           </div>
         </div>
 
         {/* Timeline */}
-        <div className="relative mb-16">
+        <div className="relative mb-16 hidden">
           <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-red-500 -translate-y-1/2 z-0"></div>
           <div className="flex justify-between items-center">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-500 text-white font-bold z-10">
