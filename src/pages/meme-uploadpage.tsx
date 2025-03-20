@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Upload, ImageIcon, Sparkles } from "lucide-react";
 import Image from "next/image";
-import TextFormatting from "@/components/text-formating";
+// import TextFormatting from "@/components/text-formating";
 
 export default function MemeUploader() {
   const [file, setFile] = useState<File | null>(null);
@@ -25,14 +25,14 @@ export default function MemeUploader() {
   const htmlToImageRef = useRef<HTMLDivElement>(null);
 
   // Text formatting state
-  const [position, setPosition] = useState("top");
-  const [textColor, setTextColor] = useState("#FFFFFF");
-  const [fontSize, setFontSize] = useState(24);
-  const [textAlign, setTextAlign] = useState<"left" | "center" | "right">(
-    "center"
-  );
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
+  // const [position, setPosition] = useState("top");
+  // const [textColor, setTextColor] = useState("#FFFFFF");
+  // const [fontSize, setFontSize] = useState(24);
+  // const [textAlign, setTextAlign] = useState<"left" | "center" | "right">(
+  //   "center"
+  // );
+  // const [isBold, setIsBold] = useState(false);
+  // const [isItalic, setIsItalic] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -184,12 +184,12 @@ export default function MemeUploader() {
         setUploadProgress(0);
         setIsUploading(false);
         setActiveTab("upload");
-        setPosition("top");
-        setTextColor("#FFFFFF");
-        setFontSize(24);
-        setTextAlign("center");
-        setIsBold(false);
-        setIsItalic(false);
+        // setPosition("top");
+        // setTextColor("#FFFFFF");
+        // setFontSize(24);
+        // setTextAlign("center");
+        // setIsBold(false);
+        // setIsItalic(false);
       }, 1500);
     } catch (error) {
       console.error("Upload failed:", error);
@@ -268,7 +268,7 @@ export default function MemeUploader() {
                       className="object-fit"
                       layout="fill"
                       />
-                    {caption && (
+                    {/* {caption && (
                       <div
                       className={`absolute inset-x-0 p-4 ${
                           position === "top"
@@ -292,7 +292,7 @@ export default function MemeUploader() {
                           ))}
                         </div>
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                   <div className="space-y-4">
@@ -321,7 +321,7 @@ export default function MemeUploader() {
                       rows={3}
                     />
 
-                    <TextFormatting
+                    {/* <TextFormatting
                       position={position}
                       setPosition={setPosition}
                       textColor={textColor}
@@ -334,7 +334,7 @@ export default function MemeUploader() {
                       setIsBold={setIsBold}
                       isItalic={isItalic}
                       setIsItalic={setIsItalic}
-                    />
+                    /> */}
                   </div>
 
                   {isUploading && (

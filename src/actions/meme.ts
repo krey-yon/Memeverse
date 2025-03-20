@@ -254,3 +254,37 @@ export const addComments = async (content: string, memeId: string) => {
   }
 }
 
+export const top10Memes = async () => {
+  try {
+    const posts = await prisma.post.findMany({
+      take: 10,
+      orderBy: { likes: { _count: "desc" } },
+      include: {
+        author: true,
+        likes: true,
+        _count: {
+          select: { likes: true, comments: true },
+        },
+      },
+    });
+    const formattedPosts = posts.map(post => ({
+      id: post.id,
+      authorId: post.authorId,
+      author: {
+        id: post.author.id,
+        name: post.author.name || "Unknown",
+      },
+      imageUrl: post.imageUrl,
+      caption: post.caption || undefined,
+      createdAt: post.createdAt.toISOString(),
+      likesCount: post._count.likes,
+      commentsCount: post._count.comments,
+      liked: post.likes.some(like => like.userId === post.authorId),
+      likes: [], // Add empty array to match meme-explorer type
+    }));
+    return formattedPosts;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
