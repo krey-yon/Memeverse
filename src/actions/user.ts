@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
+import {MemePost} from "@/lib/api";
 
 
 
@@ -41,3 +42,82 @@ export const onAuthenticateUser = async () => {
         return false;
     }
 };
+
+export const fetchUserMemes = async () => {
+    try {
+        const user = await currentUser();
+
+        if (!user) {
+            console.log("no user");
+            return;
+        }
+
+        const userPosts = await prisma.post.findMany({
+            where: {
+               author : {
+                   clerkId : user.id
+               }
+            },
+            include: {
+                likes: true,
+                comments: true,
+                author : true
+
+            }
+        });
+
+        const likedPosts = await prisma.like.findMany({
+            where: {
+                user : {
+                    clerkId : user.id
+                }
+            },
+            include: {
+                meme: {
+                    include: {
+                        likes: true,
+                        comments: true,
+                        author : true
+
+                    }
+                }
+            }
+        });
+
+
+        const allMemes: MemePost[] = [
+            ...userPosts.map((p) => ({
+                id: p.id,
+                author: { id: p.author.id, name: p.author.name! },
+                authorId: p.authorId,
+                caption: p.caption!,
+                commentsCount: p.comments.length,
+                createdAt: p.createdAt.toString(),
+                imageUrl: p.imageUrl,
+                likesCount: p.likes.length,
+                likes: p.likes,
+            })),
+            ...likedPosts.map((p) => ({
+                id: p.meme.id,
+                author: { id: p.meme.author.id, name: p.meme.author.name! },
+                authorId: p.meme.authorId,
+                caption: p.meme.caption!,
+                commentsCount: p.meme.comments.length,
+                createdAt: p.meme.createdAt.toString(),
+                imageUrl: p.meme.imageUrl,
+                likesCount: p.meme.likes.length,
+                likes: p.meme.likes,
+            })),
+        ];
+
+        const uniqueMemes = allMemes.filter(
+            (meme, index, self) =>
+                index === self.findIndex((m) => m.id === meme.id)
+        );
+
+        return uniqueMemes;
+    } catch (e) {
+        console.log(e);
+        return [];
+    }
+}
