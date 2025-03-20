@@ -3,8 +3,6 @@ import { SortOption } from '@/components/meme-explorer'
 import prisma from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server'
 
-
-
 export const getMemesActions = async (filter: SortOption, skip = 0, limit = 10) => {
   try {
     const user = await currentUser();
