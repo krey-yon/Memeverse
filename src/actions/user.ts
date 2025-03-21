@@ -4,7 +4,29 @@ import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import {MemePost} from "@/lib/api";
 
+export const fetchUserProfile = async () =>  {
+    try {
+        const user = await currentUser();
+        if (!user) return;
+        const finduser = await prisma.user.findUnique({where : {
+            clerkId : user.id
+        }})
+        return finduser;
+    } catch (error) {
+        console.log(error);
+        return;
+    }
+}
 
+export const updateUser = async (data : {name : string | null, password : string | null}) => {
+    try {
+        const user = await currentUser();
+        if (!user) return;
+        await prisma.user.update({data : data, where : {clerkId : user.id}})
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export const onAuthenticateUser = async () => {
     try {
