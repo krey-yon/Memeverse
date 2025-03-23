@@ -62,13 +62,13 @@ export default function WhyChooseUs() {
 
         <div className="flex flex-col md:flex-row gap-y-9 justify-between items-center mb-16">
           {/* Card 1 */}
-          <div className="bg-orange-600 rounded-xl p-6 w-2xs text-white shadow-lg">
+          <div className="bg-orange-600 rounded-xl p-6 w-xs text-white shadow-lg">
             <h3 className="text-2xl font-bold mb-3">Easy-to-Use Editor</h3>
             <p>No design skills? No problem! Just <br /> upload, add text, and boom - <br /> instant meme!</p>
           </div>
 
           {/* Card 2 */}
-          <div className="bg-orange-600 rounded-xl p-6 w-2xs text-white shadow-lg">
+          <div className="bg-orange-600 rounded-xl p-6 w-4xs text-white shadow-lg">
             <h3 className="text-2xl font-bold mb-3">Share Instantly</h3>
             <p>Post your memes on social media  or download <br /> them to share anywhere.</p>
           </div>
