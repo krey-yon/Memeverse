@@ -25,7 +25,7 @@ const Navbar = ({isSignedIn} : {isSignedIn : boolean}) => {
         <ul className="flex space-x-8 text-lg font-bold cursor-pointer jaro-regular ">
           <li className="text-white jaro-regular"><Link href="/meme-upload">Create Memes</Link></li>
           <li className="text-white jaro-regular"><Link href="/explorer-page">Explore</Link></li>
-          <li className="text-white jaro-regular"><Link href="/about-us">About us</Link></li>
+          <li className="text-white jaro-regular"><Link href="/">About us</Link></li>
           <li className="text-white jaro-regular"><Link href="/leaderboard">Leaderboard</Link></li>
         </ul>
         {isSignedIn ? (
@@ -59,7 +59,7 @@ const Navbar = ({isSignedIn} : {isSignedIn : boolean}) => {
           <ul className="flex flex-col space-y-3 text-lg font-bold cursor-pointer jaro-regular">
             <li><Link href="/meme-upload" className="text-white jaro-regular">Create Memes</Link></li>
             <li><Link href="/explorer-page" className="text-white jaro-regular">Explore</Link></li>
-            <li><Link href="/about-us" className="text-white jaro-regular">About us</Link></li>
+            <li><Link href="/" className="text-white jaro-regular">About us</Link></li>
             <li><Link href="/leaderboard" className="text-white jaro-regular">Leaderboard</Link></li>
           </ul>
           {isSignedIn ? (
