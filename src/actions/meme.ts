@@ -89,6 +89,7 @@ switch (filter) {
 
 export const getFilterMeme = async (filter : string) => {
   try {
+    console.log("getting memes");
     const user = await currentUser();
     if (!user) {
       return [];

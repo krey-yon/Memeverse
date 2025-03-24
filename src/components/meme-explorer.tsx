@@ -162,6 +162,7 @@ export default function MemeExplorer() {
     setPage(1)
     setHasMore(true)
     // fetchMemes() // remove this
+    console.log('fetching memes')
     fetchMemes2()
   }, [category, sort])
 
