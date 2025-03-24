@@ -35,10 +35,10 @@ export const onAuthenticateUser = async () => {
 
         const userEmail = user.emailAddresses[0]?.emailAddress;
 
-        if (!userEmail) {
-            console.error("User email not found.");
-            return false;
-        }
+        // if (!userEmail) {
+        //     console.error("User email not found.");
+        //     return false;
+        // }
 
         // Check if user exists by either Clerk ID or email
         const userExists = await prisma.user.findFirst({
