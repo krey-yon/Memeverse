@@ -5,6 +5,7 @@ import Seperation from "@/pages/seperation";
 import TrendingMemes from "@/pages/trending-page";
 import WhyChooseUs from "@/pages/why-choose-us";
 import { currentUser } from "@clerk/nextjs/server";
+import { ToastContainer } from 'react-toastify';
 
 export default async function Home() {
 
@@ -18,6 +19,18 @@ export default async function Home() {
       <TrendingMemes />
       <WhyChooseUs />
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }
