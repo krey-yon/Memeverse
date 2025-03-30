@@ -9,9 +9,10 @@ import { Loader2 } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import MemeGrid from "@/components/meme-grid"
+import { ToastContainer } from "react-toastify"
 // import { getMemes } from "@/lib/api"
 import { getFilterMeme, getMemesActions } from "@/actions/meme"
 
@@ -35,15 +36,15 @@ export type MemePost = {
   commentsCount : number
 }
 
-export type SortOption = "likes" | "date" | "comments"
-export type CategoryOption = "trending" | "new" | "oldest" | "random"
+export type SortOption = "likes" | "date" | "comments" | "oldest" | "random"
+// export type CategoryOption = "trending" | "new" | "oldest" | "random"
 
 export default function MemeExplorer() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
   // Get initial values from URL params or defaults
-  const initialCategory = (searchParams?.get("category") as CategoryOption) || "trending"
+  // const initialCategory = (searchParams?.get("category") as CategoryOption) || "trending"
   const initialSort = (searchParams?.get("sort") as SortOption) || "date"
   const initialSearch = searchParams?.get("search") || ""
 
@@ -52,7 +53,7 @@ export default function MemeExplorer() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
-  const [category, setCategory] = useState<CategoryOption>(initialCategory)
+  // const [category, setCategory] = useState<CategoryOption>(initialCategory)
   const [sort, setSort] = useState<SortOption>(initialSort)
   const [search, setSearch] = useState(initialSearch)
 
@@ -61,7 +62,7 @@ export default function MemeExplorer() {
   const updateUrlParams = useCallback(() => {
     const params = new URLSearchParams()
   
-    if (category) params.set("category", category)
+    // if (category) params.set("category", category)
     if (sort) params.set("sort", sort)
     if (search) params.set("search", search)
     else params.delete("search")
@@ -73,12 +74,12 @@ export default function MemeExplorer() {
     if (newParams !== currentParams) {
       router.push(`?${newParams}`, { scroll: false })
     }
-  }, [router, searchParams, category, sort, search]) // ✅ Added missing dependencies
+  }, [router, searchParams, sort, search]) // ✅ Added missing dependencies
   
 
   useEffect(() => {
     updateUrlParams()
-  }, [updateUrlParams, category, sort, search])
+  }, [updateUrlParams, sort, search])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
@@ -96,11 +97,11 @@ export default function MemeExplorer() {
   }
 
   // Handle category change
-  const handleCategoryChange = (value: string) => {
-    setCategory(value as CategoryOption)
-    setPage(1)
-    setMemes([])
-  }
+  // const handleCategoryChange = (value: string) => {
+  //   setCategory(value as CategoryOption)
+  //   setPage(1)
+  //   setMemes([])
+  // }
 
   // Handle sort change
   const handleSortChange = (value: string) => {
@@ -164,7 +165,7 @@ export default function MemeExplorer() {
     // fetchMemes() // remove this
     console.log('fetching memes')
     fetchMemes2()
-  }, [category, sort])
+  }, [sort])
 
   useEffect(() => {
     if (!search) return; // Prevents clearing memes when search is empty
@@ -198,23 +199,25 @@ export default function MemeExplorer() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-            <Tabs defaultValue={category} onValueChange={handleCategoryChange} className="w-full sm:w-auto">
+            {/* <Tabs defaultValue={category} onValueChange={handleCategoryChange} className="w-full sm:w-auto">
               <TabsList className="grid grid-cols-4 w-full">
                 <TabsTrigger value="trending" onClick={ () => setCategory("trending")}>Trending</TabsTrigger>
                 <TabsTrigger value="new" onClick={() => setCategory('new')}>New</TabsTrigger>
                 <TabsTrigger value="classic" onClick={() => setCategory('oldest')}>Oldest</TabsTrigger>
                 <TabsTrigger value="random" onClick={() => setCategory('random')}>Random</TabsTrigger>
               </TabsList>
-            </Tabs>
+            </Tabs> */}
 
             <Select defaultValue={sort} onValueChange={handleSortChange}>
               <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="likes">Most Liked</SelectItem>
+                <SelectItem value="oldest">Oldest</SelectItem>
                 <SelectItem value="date">Newest</SelectItem>
+                <SelectItem value="likes">Most Liked</SelectItem>
                 <SelectItem value="comments">Most Comments</SelectItem>
+                <SelectItem value="random">Random</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -227,7 +230,7 @@ export default function MemeExplorer() {
               variant="outline"
               className="mt-4"
               onClick={() => {
-                setCategory("trending")
+                // setCategory("trending")
                 setSort("date")
                 setSearch("")
                 setPage(1)
@@ -247,6 +250,18 @@ export default function MemeExplorer() {
           </div>
         )}
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   )
 }

@@ -3,6 +3,52 @@ import { SortOption } from '@/components/meme-explorer'
 import prisma from '@/lib/db';
 import { currentUser } from '@clerk/nextjs/server'
 
+export const getMemeById = async (memeId: string) => {
+  console.log("getting meme by id")
+  console.log(memeId)
+  if (!memeId) return null;
+  try {
+    const user = await currentUser();
+    if (!user) return null;
+    const findUser = await prisma.user.findUnique({ where: { clerkId: user.id } });
+    console.log("finding user")
+    if (!findUser) {
+      console.log("user not found");
+      return null;
+    }
+    console.log("searching meme by id")
+    const post = await prisma.post.findUnique({
+      where: { id: memeId },
+      include: {
+        author: true,
+        likes: true,
+        _count: {
+          select: { likes: true, comments: true },
+        },
+      },
+    });
+    if (!post) return null;
+    return {
+      id: post.id,
+      authorId: post.authorId,
+      author: {
+        id: post.author.id,
+        name: post.author.name || "Unknown",
+      },
+      imageUrl: post.imageUrl,
+      caption: post.caption || undefined,
+      createdAt: post.createdAt.toISOString(),
+      likesCount: post._count.likes,
+      commentsCount: post._count.comments,
+      liked: post.likes.some(like => like.userId === findUser.id),
+      likes: [],
+    };
+  } catch (error) {
+    console.log("error finding meme by id" + error);
+    return null;
+  }}
+
+
 export const getMemesActions = async (filter: SortOption, skip = 0, limit = 10) => {
   try {
     const user = await currentUser();
@@ -16,6 +62,39 @@ export const getMemesActions = async (filter: SortOption, skip = 0, limit = 10) 
     }
     let posts;
 switch (filter) {
+  case "random":
+    posts = await prisma.post.findMany({
+      skip,
+      take: limit,
+      include: {
+        author: true,
+        likes: true,
+        _count: {
+          select: { likes: true, comments: true },
+        },
+      },
+      orderBy: {
+        id: "asc",
+      }
+    });
+    posts = posts.sort(() => Math.random() - 0.5);
+    break;
+  case "oldest":
+    posts = await prisma.post.findMany({
+      skip,
+      take: limit,
+      include: {
+        author: true,
+        likes: true,
+        _count: {
+          select: { likes: true, comments: true },
+        },
+      },
+      orderBy: {
+        createdAt: "asc",
+      }
+    });
+    break;
   case "comments":
     posts = await prisma.post.findMany({
       skip,
